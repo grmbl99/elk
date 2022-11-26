@@ -1,4 +1,4 @@
-# Logbook
+# Info
 
 ## Docker ELK
 
