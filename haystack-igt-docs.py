@@ -9,8 +9,7 @@ from haystack.pipelines import ExtractiveQAPipeline
 # required for corporate SSL proxy
 os.environ['REQUESTS_CA_BUNDLE'] = 'cisco_umbrella_root_ca.cer'
 
-host = os.environ.get("ELASTICSEARCH_HOST", "localhost")
-document_store = ElasticsearchDocumentStore(host=host, username="", password="", index="igt-docs")
+document_store = ElasticsearchDocumentStore(host="localhost", username="", password="", index="igt-docs")
 
 doc_dir = "haystackdata/docxtest"
 docs = convert_files_to_docs(dir_path=doc_dir, split_paragraphs=True)
@@ -18,8 +17,9 @@ docs = convert_files_to_docs(dir_path=doc_dir, split_paragraphs=True)
 document_store.write_documents(docs)
 
 retriever = BM25Retriever(document_store=document_store)
-#reader = FARMReader(model_name_or_path="deepset/roberta-base-squad2", use_gpu=True)
-#reader.save("roberta_model")
+# this can be used to save a model locally; for later offline use
+# reader = FARMReader(model_name_or_path="deepset/roberta-base-squad2", use_gpu=True)
+# reader.save("roberta_model")
 reader = FARMReader(model_name_or_path="roberta_model", use_gpu=True)
 pipe = ExtractiveQAPipeline(reader, retriever)
 
